@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/FirstFragment">
+
+    <fragment
+        android:id="@+id/FirstFragment"
+        android:name="com.example.weathertab.FirstFragment"
+        android:label="Stations"
+        tools:layout="@layout/fragment_first">
+
+        <action
+            android:id="@+id/action_FirstFragment_to_Detail"
+            app:destination="@id/AirportDetail" />
+        <action
+            android:id="@+id/action_FirstFragment_to_Units"
+            app:destination="@id/UnitSelector" />
+    </fragment>
+    <fragment
+        android:id="@+id/AirportDetail"
+        android:name="com.example.weathertab.AirportDetail"
+        android:label="{tafTitle}"
+        tools:layout="@layout/airport_detail">
+
+        <action
+            android:id="@+id/action_Detail_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_Detail_to_UnitSelector"
+            app:destination="@id/UnitSelector" />
+    </fragment>
+    <fragment
+        android:id="@+id/UnitSelector"
+        android:name="com.example.weathertab.UnitsSelector"
+        android:label="Units"
+        tools:layout="@layout/units">
+
+        <action
+            android:id="@+id/action_Units_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_Units_to_AirportDetail"
+            app:destination="@id/AirportDetail" />
+    </fragment>
+
+</navigation>

@@ -1,0 +1,49 @@
+package com.example.weathertab;
+
+public  final class UNITS {
+
+    public static final String temp_c = "temp_c";
+    public static final String temp_f = "temp_f";
+    public static final String px_in = "altim_in_hg";
+    public static final String px_mb = "sea_level_pressure_mb";
+    public static final String NM = "NM";
+    public static final String KM = "KM";
+    public static String TEMP;
+    public static String PX;
+    public static String DIST;
+
+    static {
+        TEMP = temp_c;
+        PX = px_in;
+    }
+    public static String convertToF(String c){
+        if(!c.equals("n/a"))
+            return String.valueOf((Double.parseDouble(c) * 1.8) + 32).substring(0,4);
+        else
+            return c;
+    }
+    public static String convertToMb(String in){
+        if(!in.isEmpty())
+            return String.valueOf(Double.parseDouble(in) * 33.8639);
+        else
+            return "";
+    }
+    public static String convertToIn(String s){
+        if(!s.isEmpty())
+            return String.valueOf(Double.parseDouble(s) *0.0295301);
+        else
+            return "";
+    }
+    public static String convertToNm(String km)
+    {
+        if(!km.isEmpty())
+            return String.valueOf(Double.parseDouble(km) / 1.852);
+        return km;
+    }
+    public static String convertToKm(String nm)
+    {
+        if(!nm.isEmpty())
+            return String.valueOf(Double.parseDouble(nm)* 1.852);
+        return nm;
+    }
+}
