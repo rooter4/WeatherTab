@@ -1,6 +1,10 @@
 package com.example.weathertab;
 
-public  final class UNITS {
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+public final class UNITS<input> {
 
     public static final String temp_c = "temp_c";
     public static final String temp_f = "temp_f";
@@ -8,13 +12,27 @@ public  final class UNITS {
     public static final String px_mb = "sea_level_pressure_mb";
     public static final String NM = "NM";
     public static final String KM = "KM";
+    public static final String SM = "SM";
+    public static final String M = "M";
     public static String TEMP;
     public static String PX;
     public static String DIST;
+    private static SharedPreferences preferences;
+    private static SharedPreferences.Editor prefEditor;
 
-    static {
-        TEMP = temp_c;
-        PX = px_in;
+
+
+    public static void init(Context context){
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        prefEditor = preferences.edit();
+
+        TEMP = preferences.getString("TEMP", temp_c);
+        PX = preferences.getString("PX", px_in);
+        DIST = preferences.getString("DIST", SM);
+    }
+    public static void change(String key, String input){
+        prefEditor.putString(key, input);
+        prefEditor.commit();
     }
     public static String convertToF(String c){
         if(!c.equals("n/a"))

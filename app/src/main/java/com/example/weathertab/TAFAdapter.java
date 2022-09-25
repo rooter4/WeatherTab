@@ -10,14 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.weathertab.Formatter.TafFormatter;
+import com.example.weathertab.Formatter.WXFormatter;
+
 public class TAFAdapter extends RecyclerView.Adapter<TAFAdapter.TAFHolder> {
 
     int dataSize = 0;
     String name;
+    TafFormatter formatter;
 
     public TAFAdapter(String name){
     this.name = name;
     this.dataSize = WXParser.setTaf(name, 0);
+    formatter = new TafFormatter();
     }
     @NonNull
     @Override
@@ -29,11 +34,11 @@ public class TAFAdapter extends RecyclerView.Adapter<TAFAdapter.TAFHolder> {
     @Override
     public void onBindViewHolder(@NonNull TAFHolder holder, int position) {
         WXParser.setTaf(name, position);
-        holder.time.setText(WXParser.getTafTime());
-        holder.wind.setText(WXParser.getWind());
-        holder.vis.setText(WXParser.getVis());
+        holder.time.setText(formatter.getTafTime(WXParser.getTafTime(), WXParser.getChange()));
+        holder.wind.setText(formatter.getWind(WXParser.getWind()[0],WXParser.getWind()[1],WXParser.getWind()[2]));
+        holder.vis.setText(formatter.getVis(WXParser.getVis()));
         holder.sky.setText(WXParser.getSky());
-        holder.wx.setText(WXParser.getDetailedWx());
+        holder.wx.setText(formatter.getWX(WXParser.getWx()));
     }
 
     @Override

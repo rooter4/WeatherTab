@@ -1,7 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.weathertab.MainActivity">
+    tools:context="com.example.weathertab.MainActivity"
+    android:icon="@drawable/tune_48px">
+
     <item
         android:id="@+id/unit_menu"
         android:title="Units" />

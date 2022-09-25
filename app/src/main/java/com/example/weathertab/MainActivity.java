@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity  {
         context = this.getApplicationContext();
         airports = new ArrayList<>();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        UNITS.init(this);
 
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity  {
         searchView = findViewById(R.id.search_view);
 
 
-         navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
@@ -106,7 +107,9 @@ public class MainActivity extends AppCompatActivity  {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         MenuItem menuItem = menu.findItem(R.id.unit_menu);
+        menu.add("Hello");
         menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {

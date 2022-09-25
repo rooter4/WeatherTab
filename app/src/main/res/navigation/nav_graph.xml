@@ -30,6 +30,20 @@
         <action
             android:id="@+id/action_Detail_to_UnitSelector"
             app:destination="@id/UnitSelector" />
+        <action
+            android:id="@+id/action_Detail_to_Radar"
+            app:destination="@id/Radar" />
+    </fragment>
+    <fragment
+        android:id="@+id/Radar"
+        android:name="com.example.weathertab.Radar"
+        android:label="Radar"
+        tools:layout="@layout/radar_view">
+
+        <action
+            android:id="@+id/action_Radar_to_Detail"
+            app:destination="@id/AirportDetail" />
+
     </fragment>
     <fragment
         android:id="@+id/UnitSelector"

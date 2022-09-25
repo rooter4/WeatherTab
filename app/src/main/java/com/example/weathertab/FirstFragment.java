@@ -57,15 +57,14 @@ public class FirstFragment extends Fragment {
         handler = new Handler(){
             @Override
             public void handleMessage(@NonNull Message msg) {
-                updateRV();
+                adapter.updateData(data);
+                adapter.notifyDataSetChanged();
                 refreshLayout.setRefreshing(false);
                 super.handleMessage(msg);
             }
 
 
         };
-
-
 
 
         ((MainActivity)getActivity()).setFragmentRefreshListener(new MainActivity.FragmentRefreshListener() {
@@ -84,10 +83,6 @@ public class FirstFragment extends Fragment {
 
         return binding.getRoot();
 
-    }
-
-    private void updateRV() {
-        adapter.notifyDataSetChanged();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -196,16 +191,18 @@ public class FirstFragment extends Fragment {
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.notifyDataSetChanged();
-                WXParser.Refresh(adapter,data,handler);
+                updateData();
+                WXParser.Refresh(handler);
+                refreshLayout.setRefreshing(true);
+
 
             }
         });
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                adapter.notifyDataSetChanged();
-                WXParser.Refresh(adapter,data,handler);
+                updateData();
+                WXParser.Refresh(handler);
 
 
 

@@ -20,9 +20,6 @@
     <style name="Theme.WeatherTab.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:actionMenuTextColor">@color/primary_dark</item>
-
-
     </style>
 
     <style name="Theme.WeatherTab.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

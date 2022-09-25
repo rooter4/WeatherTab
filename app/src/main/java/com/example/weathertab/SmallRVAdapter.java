@@ -9,14 +9,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.weathertab.Formatter.MetarFormatter;
 
 import java.util.List;
 
@@ -26,12 +25,13 @@ public class SmallRVAdapter extends RecyclerView.Adapter<SmallRVAdapter.AirportV
     Context context;
     NavController navController;
     boolean clickable;
+    MetarFormatter formatter;
     SmallRVAdapter(Context context, List<String> iData, boolean clickable) {
         data = iData;
         updateData(data);
         this.context = context;
         this.clickable = clickable;
-
+        formatter = new MetarFormatter();
     }
     @Override
     public AirportViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,7 +45,7 @@ public class SmallRVAdapter extends RecyclerView.Adapter<SmallRVAdapter.AirportV
         WXParser.setMetar(name);
         holder.id.setText(name);
         holder.flight.setText(WXParser.getSky());
-        holder.wind.setText(WXParser.getWind());
+        holder.wind.setText(formatter.getWind(WXParser.getWind()[0],WXParser.getWind()[1],WXParser.getWind()[2]));
         String cat = WXParser.getCondition();
         holder.category.setText(cat);
         GradientDrawable gd = (GradientDrawable) holder.category.getBackground();
@@ -62,15 +62,13 @@ public class SmallRVAdapter extends RecyclerView.Adapter<SmallRVAdapter.AirportV
         holder.pa.setText(WXParser.getPa());
         holder.da.setText(WXParser.getDa());
 
-        int time = WXParser.getTime();
-        holder.time.setText(time + " min");
-        if(time < 60)
-            holder.time.setTextColor(ContextCompat.getColor(context,R.color.VFR));
-        else
-            holder.time.setTextColor(ContextCompat.getColor(context, R.color.error));
+
+        holder.time.setText(formatter.getTime(WXParser.getTime()));
+        holder.time.setTextColor(ContextCompat.getColor(context,formatter.getColor()));
+
         //holder.temp_dp.setText(parser.getTemp_Dp(name));
-        holder.temp_dp.setText(WXParser.getTemp_Dp());
-        holder.px.setText(WXParser.getPx());
+        holder.temp_dp.setText(formatter.getTemp_Dp(WXParser.getTemp(), WXParser.getDp()));
+        holder.px.setText(formatter.getPx(WXParser.getPxMb(), WXParser.getPxIn()));
         if(WXParser.hasTaf())
             holder.hasTaf.setVisibility(View.VISIBLE);
         else
