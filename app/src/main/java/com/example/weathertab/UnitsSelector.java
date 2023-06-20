@@ -44,9 +44,9 @@ public class UnitsSelector extends Fragment {
         tempSwitch = view.findViewById(R.id.temp_switch);
         pxSwitch = view.findViewById(R.id.px_switch);
         distSwitch = view.findViewById(R.id.spinner);
-        if(UNITS.TEMP == UNITS.temp_f)
+        if(UNITS.TEMP.equals(UNITS.temp_f))
             tempSwitch.setChecked(true);
-        if(UNITS.PX == UNITS.px_mb)
+        if(UNITS.PX.equals(UNITS.px_mb))
             pxSwitch.setChecked(true);
         List<String> temp = Arrays.asList(getResources().getStringArray(R.array.dropDown));
         distSwitch.setSelection(temp.indexOf(UNITS.DIST));

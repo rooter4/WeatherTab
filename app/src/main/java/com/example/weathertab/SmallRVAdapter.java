@@ -3,6 +3,8 @@ package com.example.weathertab;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,9 +121,11 @@ public class SmallRVAdapter extends RecyclerView.Adapter<SmallRVAdapter.AirportV
             category = itemView.findViewById(R.id.category);
             wind = itemView.findViewById(R.id.wind);
             wx = itemView.findViewById(R.id.wx_string);
+            wx.addTextChangedListener(new MutliTextWatcher(wx));
             time = itemView.findViewById(R.id.time);
             temp_dp = itemView.findViewById(R.id.temp_dp);
             px = itemView.findViewById(R.id.alt);
+
             hasTaf = itemView.findViewById(R.id.taf);
             pa = itemView.findViewById(R.id.pa);
             da = itemView.findViewById(R.id.da);
@@ -132,5 +136,31 @@ public class SmallRVAdapter extends RecyclerView.Adapter<SmallRVAdapter.AirportV
 
        data = uData;
 
+    }
+    private class MutliTextWatcher implements TextWatcher {
+
+        TextView view;
+
+        public MutliTextWatcher(View view){
+            this.view = (TextView) view;
+        }
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if(editable.length() == 0)
+                view.setVisibility(View.GONE);
+            else
+                view.setVisibility(View.VISIBLE);
+
+        }
     }
 }

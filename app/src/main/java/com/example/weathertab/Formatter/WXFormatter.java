@@ -2,7 +2,12 @@ package com.example.weathertab.Formatter;
 
 import com.example.weathertab.UNITS;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 public interface  WXFormatter {
 
@@ -18,10 +23,10 @@ public interface  WXFormatter {
 
   }};
   HashMap<String, String> COMMON = new HashMap() {{
-    put("wind_dir", "Wind Direction:");
-    put("wind_spd", "Wind Speed (kts):");
-    put("wind_gst", "Wind Gust:");
-    put("vis", "Visibility:");
+    put("wind_dir", "Wind Direction: ");
+    put("wind_spd", "Wind Speed (kts): ");
+    put("wind_gst", "Wind Gust: ");
+    put("vis", "Visibility: ");
     put("wx", "Weather: ");
     put("sky", "Sky Cover: ");
     put("cat", "Current Flight Condition: ");
@@ -42,7 +47,10 @@ public interface  WXFormatter {
     put("pcp24","Precipitation Amount  ~24hrs (in): ");
     put("snow","Snowfall (in):");
     put("vv","Vertical Visibility (ft): ");
-
+    put("wind_shr_h","Wind Shear Altitude: ");
+    put("wind_shr_d","Wind Shear Direction: ");
+    put("wind_shr_spd","Wind Shear Speed (kts): ");
+    put("issue_time","Taf issued at: ");
   }};
    HashMap BADSTUFF = new HashMap() {{
     put("PO", "Dust Whirls");
@@ -97,6 +105,21 @@ public interface  WXFormatter {
 
   String getWind(String dir, String spd, String gust);
   String getVis(String vis);
+  public static String getIssue(String date){
+      DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+      DateFormat dft = new SimpleDateFormat("HH:mm' 'MM/dd");
+      df.setTimeZone(TimeZone.getTimeZone("UTC"));
+      Date d = new Date();  // From your code above
+      Date n = new Date();
+
+      try {
+          d = df.parse(date);
+
+      } catch (ParseException e) {
+          e.printStackTrace();
+      }
+        return dft.format(d);
+  }
   default String getSky(String sky){
     return sky;
   }
@@ -131,16 +154,19 @@ public interface  WXFormatter {
   }
     default String getPx(String mb, String in) {
         String res = "";
-        if (UNITS.PX == UNITS.px_mb) {
+        if (UNITS.PX.equals(UNITS.px_mb)) {
             res = mb;
             if (res.equals("")) {
                 res = UNITS.convertToMb(in);
             }
-        } else if (UNITS.PX == UNITS.px_in) {
+            res += " mb";
+        } else if (UNITS.PX.equals(UNITS.px_in)) {
             res = in;
+            if (res.length() > 5)
+                res = res.substring(0, 5);
+            res += " inHg";
         }
-        if (res.length() > 5)
-            res = res.substring(0, 5);
+
 
         return res;
     }

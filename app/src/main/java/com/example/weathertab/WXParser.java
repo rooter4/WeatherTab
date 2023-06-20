@@ -9,6 +9,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 
@@ -67,6 +68,7 @@ public final class WXParser {
     private static Document tafDoc;
     public static WeatherHolder airport;
     private static Handler handler;
+    private static Context context;
 
     static {
         handler = new Handler() {
@@ -79,6 +81,7 @@ public final class WXParser {
         doc = null;
         tafDoc = null;
         airport = null;
+        context = null;
 
 
     }
@@ -86,16 +89,17 @@ public final class WXParser {
     public WXParser() {
 
     }
-    public static void init(Context context) {
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+    public static void init(Context con) {
+        preferences = PreferenceManager.getDefaultSharedPreferences(con);
         prefEditor = preferences.edit();
+        context = con;
 
     }
     public static Document getDoc() {
 
         if (doc == null) {
             try {
-                String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath();
+                String path = context.getFilesDir().getPath();
 
                 File f = new File(path + "/recent.xml");
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -115,7 +119,7 @@ public final class WXParser {
 
         if (tafDoc == null) {
             try {
-                String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath();
+                String path = context.getFilesDir().getPath();
 
                 File f = new File(path + "/taf.xml");
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -148,12 +152,12 @@ public final class WXParser {
                 URL taf = new URL(tafUrl + icao);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 System.out.println(System.getProperty("http.agent"));
-                conn.setRequestProperty("User-Agent", System.getProperty("http.agent"));
+                conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:221.0) Gecko/20100101 Firefox/31.0");
                 System.out.println("RESPONSE:  " + conn.getResponseCode());
                 conn.connect();
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = factory.newDocumentBuilder();
-                String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath();
+                String path = context.getFilesDir().getPath();
 
                 doc = builder.parse(conn.getInputStream());
                 doc.getDocumentElement().normalize();
@@ -247,6 +251,7 @@ public final class WXParser {
     public static String getTime() {
         return airport.fields.get("time");
     }
+    public static String getIssueTime(){return airport.fields.get("issue_time");}
 
     public static String[] getWind() {
         return new String[]{airport.fields.get("wind_dir"), airport.fields.get("wind_spd"), airport.fields.get("wind_gst")};
@@ -388,6 +393,7 @@ public final class WXParser {
                     String aName = el.getElementsByTagName("station_id").item(0).getTextContent();
                     if (aName.equals(airport.fields.get("name"))) {
                         String date = el.getElementsByTagName("valid_time_to").item(0).getTextContent();
+                        airport.fields.put("issue_time", el.getElementsByTagName(airport.req.get("issue_time")).item(0).getTextContent());
 
                         return isValid(date);
                     }
@@ -425,8 +431,8 @@ public final class WXParser {
             put("wind_gst", "");
             put("vis", "");
             put("wx", "");
-            put("temp_c", "n/a");
-            put("dp_c", "n/a");
+            put("temp_c", "");
+            put("dp_c", "");
             put("sky", "");
             put("px_in", "");
             put("px_mb", "");
@@ -435,6 +441,7 @@ public final class WXParser {
             put("name", "");
             put("id", "");
             put("time", "");
+            put("issue_time","");
             put("fcst_to", "");
             put("fcst_from", "");
             put("type", "FM");
@@ -451,6 +458,10 @@ public final class WXParser {
             put("pcp24", "");
             put("snow", "");
             put("vv", "");
+            put("wind_shr_h","");
+            put("wind_shr_d","");
+            put("wind_shr_spd","");
+
 
         }};
         public HashMap<String, String> req = new HashMap() {{
@@ -484,7 +495,10 @@ public final class WXParser {
             put("pcp24", "pcp24_in");
             put("snow", "snow_in");
             put("vv", "vert_vis_ft");
-
+            put("issue_time","bulletin_time");
+            put("wind_shr_h","wind_shear_hgt_ft_agl");
+            put("wind_shr_d","wind_shear_dir_degrees");
+            put("wind_shr_spd","wind_shear_speed_kt");
         }};
 
         public WeatherHolder() {

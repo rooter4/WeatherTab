@@ -3,6 +3,7 @@ package com.example.weathertab;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -11,11 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
-import androidx.cardview.widget.CardView;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -27,11 +30,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.weathertab.Formatter.WXFormatter;
 import com.example.weathertab.databinding.AirportDetailBinding;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class AirportDetail extends Fragment {
@@ -45,6 +45,7 @@ public class AirportDetail extends Fragment {
     Switch rawSwitch;
     TextView rawMetar;
     TextView rawTaf;
+    TextView issueTime;
     LinearLayout layout;
     LinearLayoutCompat.LayoutParams layoutParams;
     Button radar;
@@ -58,7 +59,11 @@ public class AirportDetail extends Fragment {
             "sky",
             "px_in",
             "px_mb",
-            "cat", "lat", "long", "px_chng", "maxT", "minT", "maxT24", "minT24", "precip", "pcp3", "pcp6", "pcp24", "snow"};
+            "cat", "lat", "long", "px_chng", "maxT", "minT", "maxT24", "minT24", "precip", "pcp3", "pcp6", "pcp24", "snow"
+            ,"wind_shr_h"
+   ,"wind_shr_d"
+    ,"wind_shr_spd"
+};
 
     public AirportDetail(){
 
@@ -69,6 +74,10 @@ public class AirportDetail extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = AirportDetailBinding.inflate(inflater,container,false);
+
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        View view = toolbar.findViewById(R.id.search_view);
+        view.setVisibility(View.GONE);
         return binding.getRoot();
     }
 
@@ -78,13 +87,13 @@ public class AirportDetail extends Fragment {
 
         List<String> data = new ArrayList<>();
 
-
         aName = (String) getArguments().get("id");
         data.add(aName);
         rawMetar = view.findViewById(R.id.metar_raw);
         rawTaf = view.findViewById(R.id.taf_raw);
         layout = view.findViewById(R.id.info);
         radar = view.findViewById(R.id.radar_button);
+        issueTime = view.findViewById(R.id.issue_time);
         radar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,7 +104,6 @@ public class AirportDetail extends Fragment {
                 navController.navigate(R.id.action_Detail_to_Radar, bundle);
             }
         });
-        layoutParams = new LinearLayoutCompat.LayoutParams(layout.getLayoutParams());
 
         WXParser.setMetar(aName);
 
@@ -110,14 +118,16 @@ public class AirportDetail extends Fragment {
 
 
         tafRv = view.findViewById(R.id.taf_rv);
-        tafAdapter = new TAFAdapter(aName);
+        tafAdapter = new TAFAdapter(aName,getContext());
         tafRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         tafRv.setAdapter(tafAdapter);
 
         DividerItemDecoration decoration = new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL);
         decoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.divider));
-
-
+        if(WXParser.hasTaf()) {
+            issueTime.setText(WXFormatter.COMMON.get("issue_time") + WXFormatter.getIssue(WXParser.getIssueTime()));
+            issueTime.setBackgroundColor(getResources().getColor(R.color.primary_light));
+        }
 
 
         copyRv = view.findViewById(R.id.rv_copy);
@@ -127,12 +137,14 @@ public class AirportDetail extends Fragment {
 
         copyRv.setAdapter(copyAdapter);
 
+
         rawSwitch = view.findViewById(R.id.raw_switch);
         rawSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
                     tafRv.setVisibility(View.GONE);
+                    issueTime.setVisibility(View.GONE);
                     WXParser.setMetar(aName);
                     rawMetar.setText(Html.fromHtml("<b> METAR: </b>") +" \n" + WXParser.getRawMetar());
                     WXParser.setTaf(aName,0);
@@ -142,6 +154,7 @@ public class AirportDetail extends Fragment {
                 else
                 {
                     tafRv.setVisibility(View.VISIBLE);
+                    issueTime.setVisibility(View.VISIBLE);
                     rawMetar.setText("");
                     rawTaf.setText("");
                 }
@@ -156,5 +169,9 @@ public class AirportDetail extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        View view = toolbar.findViewById(R.id.search_view);
+        view.setVisibility(View.VISIBLE);
     }
+
 }

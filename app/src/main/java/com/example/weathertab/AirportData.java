@@ -106,16 +106,7 @@ public final class AirportData {
 
 
     }
-    public static Boolean hasWX(String name){
-        if(wxStations.contains(name))
-            return true;
-        else if (wxStations.contains(name.substring(0,name.length()-1)+"X")) {
-            System.out.println("with X");
-            return true;
-        }
 
-            return false;
-    }
     public static String getClosestStation(String name){
         int closest = 100000;
         int index = 0;
@@ -139,13 +130,7 @@ public final class AirportData {
                 closest = (int) d;
                 index = i;
             }
-
-            double X = Math.cos(wlat) * Math.sin(wLon-aLon);
-            double Y = Math.cos(aLat) * Math.sin(wlat) - Math.sin(aLat) * Math.cos(wlat) * cos(wLon-aLon);
-            double angle = Math.atan2(X,Y);
-            System.out.println(wxStat.get(i) + " Distance = " + Math.toDegrees(angle) +" @ " + d + "m");
-
-        }
+           }
         return wxStat.get(index);
     }
     private static double deg2rad(double deg){

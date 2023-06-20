@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.TimeZone;
 
 public  class TafFormatter implements WXFormatter{
@@ -55,6 +56,7 @@ public  class TafFormatter implements WXFormatter{
       String to = input[1];
       DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
       DateFormat dft = new SimpleDateFormat("HH:mm' 'MM/dd");
+      DateFormat simple = new SimpleDateFormat("HH:mm' /'dd");
       df.setTimeZone(TimeZone.getTimeZone("UTC"));
       Date d = new Date();  // From your code above
       Date n = new Date();
@@ -69,7 +71,7 @@ public  class TafFormatter implements WXFormatter{
 
       String change = wxString.get(type).toString();
 
-      return change +": " + dft.format(d) + " until " + dft.format(n);
+      return change +": " + simple.format(d) + " until " + simple.format(n);
    }
 
 }

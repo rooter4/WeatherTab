@@ -98,7 +98,7 @@
 
             <TextView
                 android:id="@+id/temp_dp"
-                android:layout_width="wrap_content"
+                android:layout_width="62dp"
                 android:layout_height="wrap_content"
                 android:paddingRight="10dp"
                 android:text="TextView"

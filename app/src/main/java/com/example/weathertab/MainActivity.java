@@ -1,20 +1,31 @@
 package com.example.weathertab;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.cursoradapter.widget.CursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.navigation.NavController;
@@ -98,8 +109,12 @@ public class MainActivity extends AppCompatActivity  {
                 from,
                 to,
                 CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-        //searchAdapter.setDropDownViewResource(R.color.white);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
     }
 
@@ -107,9 +122,10 @@ public class MainActivity extends AppCompatActivity  {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         MenuItem menuItem = menu.findItem(R.id.unit_menu);
-        menu.add("Hello");
+        SpannableString s = new SpannableString(menuItem.getTitle());
+        s.setSpan(new ForegroundColorSpan(Color.BLACK), 0, s.length(), 0);
+        menuItem.setTitle(s);
         menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -151,8 +167,6 @@ public class MainActivity extends AppCompatActivity  {
                 if(!airports.contains(clicked))
                     airports.add(clicked);
 
-                for(String s: airports)
-                    System.out.println(s);
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 SharedPreferences.Editor edit = prefs.edit();
@@ -198,9 +212,6 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-
-
         return super.onOptionsItemSelected(item);
     }
 

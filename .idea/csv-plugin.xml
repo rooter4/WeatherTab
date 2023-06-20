@@ -3,21 +3,7 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="C:\Users\luker\AppData\Local\Google\AndroidStudio2021.2\device-explorer\google-pixel_5-08251FDD4004PW\storage\emulated\0\Documents\temp.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\app\src\main\assets\airports.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\app\src\main\res\raw\airports.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

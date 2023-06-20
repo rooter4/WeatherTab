@@ -2,8 +2,9 @@
 <resources>
 
     <style name="Theme.WeatherTab" parent="Theme.MaterialComponents.Light.DarkActionBar">
+
         <item name="android:forceDarkAllowed">false</item>
-        <item name="android:actionMenuTextColor">@color/primary_dark</item>
+        <item name="android:actionMenuTextColor">@color/black</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primary_dark</item>

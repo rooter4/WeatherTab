@@ -43,15 +43,19 @@ public class MetarFormatter  implements WXFormatter{
         if (spd.equals("0") && dir.equals("0")) {
             dir = "CALM";
             spd = "";
-        } else if (dir.equals("0"))
-            dir = "VRB - ";
-        else
+        } else if (dir.equals("0")) {
+            dir = "VRB\n";
+            spd += " kts";
+        }
+        else {
             dir += "\u00B0 \n";
+            spd += " kts";
+        }
 
         if (!gust.isEmpty())
             gust = "\nG " + gust + " kts";
 
-        return dir + spd + " kts " + gust;
+        return dir + spd  + gust;
 
     }
 
@@ -106,7 +110,7 @@ public class MetarFormatter  implements WXFormatter{
         return color;
     }
     public  String getTemp_Dp(String temp, String dp) {
-        if (UNITS.TEMP == UNITS.temp_f)
+        if (UNITS.TEMP.equals(UNITS.temp_f))
             return UNITS.convertToF(temp) + "\u00B0F" + "\n" + UNITS.convertToF(dp) + "\u00B0F";
         return temp + "\u00B0C" + "\n" + dp+ "\u00B0C";
     }

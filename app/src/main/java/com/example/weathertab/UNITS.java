@@ -35,10 +35,15 @@ public final class UNITS<input> {
         prefEditor.commit();
     }
     public static String convertToF(String c){
-        if(!c.equals("n/a"))
-            return String.valueOf((Double.parseDouble(c) * 1.8) + 32).substring(0,4);
-        else
-            return c;
+        try {
+            if (!c.equals("n/a"))
+                return String.valueOf((Double.parseDouble(c) * 1.8) + 32).substring(0, 4);
+            else
+                return c;
+        }catch (NumberFormatException e)
+        {
+            return "";
+        }
     }
     public static String convertToMb(String in){
         if(!in.isEmpty())
